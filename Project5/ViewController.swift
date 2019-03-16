@@ -1,16 +1,10 @@
-//
-//  ViewController.swift
-//  Project5
-//
-//  Created by John Nyquist on 3/15/19.
-//  Copyright © 2019 Nyquist Art + Logic LLC. All rights reserved.
-//
-
 import UIKit
 
 class ViewController: UITableViewController {
     var allWords = [String]()
     var usedWords = [String]()
+    
+    //MARK: UIViewController Class
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,11 +23,7 @@ class ViewController: UITableViewController {
         startGame()
     }
     
-    func startGame() {
-        title = allWords.randomElement()
-        usedWords.removeAll(keepingCapacity: true)
-        tableView.reloadData()
-    }
+    //MARK: - UITableViewDataSource Protocol
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return usedWords.count
@@ -45,19 +35,15 @@ class ViewController: UITableViewController {
         return cell
     }
     
-    @objc func promptForAnswer() {
-        let ac = UIAlertController(title: "Enter answer", message: nil, preferredStyle: .alert)
-        ac.addTextField()
-        
-        let submitAction = UIAlertAction(title: "Submit", style: .default) { [unowned self, ac] _ in
-            let answer = ac.textFields![0]
-            self.submit(answer: answer.text!)
-        }
-        
-        ac.addAction(submitAction)
-        present(ac, animated: true)
-    }
     
+    //MARK: - ViewController
+    
+    func startGame() {
+        title = allWords.randomElement()
+        usedWords.removeAll(keepingCapacity: true)
+        tableView.reloadData()
+    }
+
     func submit(answer: String) {
         let lowerAnswer = answer.lowercased()
         let errorTitle: String
@@ -113,6 +99,21 @@ class ViewController: UITableViewController {
         return misspelledRange.location == NSNotFound
     }
     
+    
+    //MARK: - #selector
+    
+    @objc func promptForAnswer() {
+        let ac = UIAlertController(title: "Enter answer", message: nil, preferredStyle: .alert)
+        ac.addTextField()
+        
+        let submitAction = UIAlertAction(title: "Submit", style: .default) { [unowned self, ac] _ in
+            let answer = ac.textFields![0]
+            self.submit(answer: answer.text!)
+        }
+        
+        ac.addAction(submitAction)
+        present(ac, animated: true)
+    }
 }
 
 
