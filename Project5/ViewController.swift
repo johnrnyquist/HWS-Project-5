@@ -1,6 +1,7 @@
 import UIKit
 
 class ViewController: UITableViewController {
+    
     var allWords = ["silkworm"]
     var usedWords = [String]()
     
