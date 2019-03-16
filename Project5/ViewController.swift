@@ -14,6 +14,9 @@ class ViewController: UITableViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add,
                                                             target: self,
                                                             action: #selector(promptForAnswer))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh,
+                                                           target: self,
+                                                           action: #selector(startGame))
         loadDefaultWords()
         startGame()
     }
@@ -41,7 +44,7 @@ class ViewController: UITableViewController {
         allWords = startWords.components(separatedBy: "\n")
     }
 
-    func startGame() {
+    @objc func startGame() {
         title = allWords.randomElement()
         usedWords.removeAll(keepingCapacity: true)
         tableView.reloadData()
