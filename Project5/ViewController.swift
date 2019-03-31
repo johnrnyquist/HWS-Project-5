@@ -2,9 +2,25 @@ import UIKit
 
 class ViewController: UITableViewController {
     
-    var allWords = ["silkworm"]
+    var allWords = [String]()
     var usedWords = [String]()
     
+    
+    func save() {
+        let defaults = UserDefaults.standard
+        defaults.set(usedWords, forKey: "usedWords")
+        defaults.set(allWords, forKey: "allWords")
+        defaults.set(title!, forKey: "title")
+    }
+    
+    func load() {
+        let defaults = UserDefaults.standard
+        usedWords = defaults.object(forKey: "usedWords") as? [String] ?? [String]()
+        allWords = defaults.object(forKey: "allWords") as? [String] ?? [String]()
+        title = defaults.string(forKey: "title") ?? "Error"
+    }
+    
+
     
     //MARK: - UIViewController Class
     
@@ -17,10 +33,19 @@ class ViewController: UITableViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh,
                                                            target: self,
                                                            action: #selector(startGame))
-        loadDefaultWords()
-        startGame()
+        load()
+        if allWords.count == 0 {
+            loadDefaultWords()
+            startGame()
+        } else {
+            continueGame()
+        }
     }
 
+    func continueGame() {
+        tableView.reloadData()
+    }
+    
     
     //MARK: - UITableViewDataSource Protocol
     
@@ -47,6 +72,7 @@ class ViewController: UITableViewController {
     @objc func startGame() {
         title = allWords.randomElement()
         usedWords.removeAll(keepingCapacity: true)
+        save()
         tableView.reloadData()
     }
     
@@ -80,6 +106,7 @@ class ViewController: UITableViewController {
         }
         
         usedWords.insert(answer, at: 0)
+        save()
         let indexPath = IndexPath(row: 0, section: 0)
         tableView.insertRows(at: [indexPath], with: .automatic)
     }
